@@ -1,6 +1,7 @@
 package Demo1;
 
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import utils.druidTool;
 
@@ -12,7 +13,8 @@ public class demo {
     //获取jdbcTemplate对象
     static JdbcTemplate jdbcTemplate = new JdbcTemplate(druidTool.getDataSource()); //默认就是private
     public static String root = null;
-    public static String password  = null;
+    public static String password = null;
+
     public static void main(String[] args) {
 
         while (true) {
@@ -27,21 +29,21 @@ public class demo {
 
             switch (option) {
                 case "1": {
-                   if (isloginStudnet()){
-                       studentChoose();
-                   }
+                    if (isloginStudnet()) {
+                        studentChoose();
+                    }
                     break;
 
                 }
                 case "2": {
-                   if (isloginTeacher()){
-                       teacherChoose();
-                   }
+                    if (isloginTeacher()) {
+                        teacherChoose();
+                    }
                     break;
 
                 }
                 case "3": {
-
+                    enroll();
                     break;
                 }
                 case "0": {
@@ -52,7 +54,6 @@ public class demo {
 
         }
     }
-
 
 
     private static boolean isloginTeacher() {
@@ -77,7 +78,7 @@ public class demo {
         }
     }
 
-    private static void teacherChoose(){
+    private static void teacherChoose() {
         while (true) {
             System.out.println("-------------------欢迎来到教师选课系统--------------------");
             System.out.println("1.个人信息查询");
@@ -88,15 +89,15 @@ public class demo {
 
             Scanner sc = new Scanner(System.in);
             String option = sc.nextLine();
-            switch (option){
-                case "1":{
+            switch (option) {
+                case "1": {
                     String sql = "select * from teacher where root = ? and password = ? ";
-                    Map<String,Object> stringObjectMap = jdbcTemplate.queryForMap(sql, root, password);
+                    Map<String, Object> stringObjectMap = jdbcTemplate.queryForMap(sql, root, password);
                     stringObjectMap.values().stream().map(Object::toString).forEach(value -> System.out.print(value.replaceAll("[()]", "") + " "));
                     System.out.println("");
                     break;
                 }
-                case "2":{
+                case "2": {
                     while (true) {
                         System.out.println("选择你要修改的内容");
                         System.out.println("1.姓名");
@@ -121,7 +122,7 @@ public class demo {
                                 System.out.println("电话修改成功!");
                                 break;
                             }
-                            case "0":{
+                            case "0": {
                                 break;
                             }
                         }
@@ -131,15 +132,15 @@ public class demo {
                     }
                     break;
                 }
-                case "3":{
+                case "3": {
                     System.out.println("请输入你的新密码");
                     String password = sc.nextLine();
                     String sql = "update  teacher set  password  = ? where root = ? and password = ? ";
-                    jdbcTemplate.update(sql,password,root,password);
+                    jdbcTemplate.update(sql, password, root, password);
                     System.out.println("密码修改成功!");
                     break;
                 }
-                case "4":{
+                case "4": {
                     while (true) {
                         System.out.println("选课查询");
                         System.out.println("1.查看我的课程");
@@ -153,7 +154,7 @@ public class demo {
                                 System.out.println("我的课程");
                                 String sql = "select teacher.name,classtable.className from teacher join classtable on teacher.id = classtable.teacherid where teacher.root = ? and teacher.password = ?";
                                 List<Map<String, Object>> List = jdbcTemplate.queryForList(sql, root, password);
-                                for (Map<String,Object> map:List){
+                                for (Map<String, Object> map : List) {
                                     map.values().stream().map(Object::toString).forEach(value -> System.out.print(value.replaceAll("[()]", "") + " "));
                                 }
                                 System.out.println("");
@@ -173,7 +174,7 @@ public class demo {
                                         "on classtable.teacherid = teacher.id\n" +
                                         "where teacher.root = ? and teacher.password = ?";
                                 List<Map<String, Object>> List = jdbcTemplate.queryForList(sql, root, password);
-                                for (Map<String,Object> map:List){
+                                for (Map<String, Object> map : List) {
                                     map.values().stream().map(Object::toString).forEach(value -> System.out.print(value.replaceAll("[()]", "") + " "));
                                 }
                                 System.out.println("");
@@ -196,7 +197,7 @@ public class demo {
                                             System.out.println("姓名修改成功!");
                                             break;
                                         }
-                                        case "0":{
+                                        case "0": {
                                             break;
                                         }
                                     }
@@ -215,20 +216,19 @@ public class demo {
                     break;
                 }
 
-                case "0":{
+                case "0": {
                     break;
                 }
             }
-            if (option.equals("0")){
+            if (option.equals("0")) {
                 break;
             }
         }
     }
 
 
-
     //验证学生登录-------------------------------------------
-    private static boolean isloginStudnet(){
+    private static boolean isloginStudnet() {
         System.out.println("学生登陆系统  请输入你的账号和密码：");
         while (true) {
             Scanner scanner = new Scanner(System.in);
@@ -252,7 +252,7 @@ public class demo {
     }
 
 
-    private static void studentChoose(){
+    private static void studentChoose() {
         while (true) {
             System.out.println("-------------------欢迎来到学生选课系统--------------------");
             System.out.println("1.个人信息查询");
@@ -263,8 +263,8 @@ public class demo {
 
             Scanner sc = new Scanner(System.in);
             String option = sc.nextLine();
-            switch (option){
-                case "1":{
+            switch (option) {
+                case "1": {
                     String sql = "select * from student where root = ? and password = ? ";
                     Map<String, Object> stringObjectMap = jdbcTemplate.queryForMap(sql, root, password);
                     stringObjectMap.values().stream().map(Object::toString).forEach(value -> System.out.print(value.replaceAll("[()]", "") + " "));
@@ -315,16 +315,16 @@ public class demo {
 
                 }
                 break;
-                case "3":{
+                case "3": {
                     System.out.println("请输入你的新密码");
                     String password1 = sc.nextLine();
                     String sql = "update  student set  password  = ? where root = ? and password = ? ";
-                    jdbcTemplate.update(sql,password1,root,password);
+                    jdbcTemplate.update(sql, password1, root, password);
                     System.out.println("密码修改成功!");
                     break;
                 }
 
-                case "4":{
+                case "4": {
 
                     while (true) {
                         System.out.println("请选择你的课程操作");
@@ -334,29 +334,29 @@ public class demo {
                         System.out.println("0.退出");
                         Scanner sc1 = new Scanner(System.in);
                         String option2 = sc.nextLine();
-                        switch (option2){
-                            case "1":{
+                        switch (option2) {
+                            case "1": {
                                 System.out.println("你的选课情况是");
                                 String sql = " select student.name,classtable.className " +
-                                        "from student join associatetables on student.id =associatetables.学生id "+
-                                        "join classtable on classtable.id =associatetables.课程id  "+
+                                        "from student join associatetables on student.id =associatetables.学生id " +
+                                        "join classtable on classtable.id =associatetables.课程id  " +
                                         "where student.root = ? and student.password = ?";
                                 List<Map<String, Object>> List = jdbcTemplate.queryForList(sql, root, password);
-                                for (Map<String,Object> map:List){
+                                for (Map<String, Object> map : List) {
                                     map.values().stream().map(Object::toString).forEach(value -> System.out.print(value.replaceAll("[()]", "") + " "));
 
                                 }
                                 System.out.println("");
                                 break;
                             }
-                            case "2":{
+                            case "2": {
                                 System.out.println("你要选择的课程id是?");
                                 String classid = sc.nextLine();
                                 String sql = "select id from student where root = ? and password = ?";
                                 Map<String, Object> map = jdbcTemplate.queryForMap(sql, root, password);
 
                                 String sql2 = "insert into associatetables values(null,?,?) ";
-                                jdbcTemplate.update(sql2,map.get("id"),classid);
+                                jdbcTemplate.update(sql2, map.get("id"), classid);
 
                                 int i = Integer.parseInt(map.get("id").toString());
                                 int i2 = Integer.parseInt(classid);
@@ -364,26 +364,26 @@ public class demo {
                                 Long o = jdbcTemplate.queryForObject(sql1, Long.class);
                                 int i3 = o.intValue(); // 将 Long 类型的结果转换为 int 类型
                                 System.out.println(i3);
-                                if (i3>=2){
+                                if (i3 >= 2) {
                                     System.out.println("你选了重复的课 选课失败!");
                                 }
                                 String sql3 = "Delete from associatetables where 学生id = ? and 课程id = ? ";
-                                jdbcTemplate.update(sql3,map.get("id"),classid);
+                                jdbcTemplate.update(sql3, map.get("id"), classid);
 
                                 String sql4 = "insert into associatetables values(null,?,?) ";
-                                jdbcTemplate.update(sql4,map.get("id"),classid);
+                                jdbcTemplate.update(sql4, map.get("id"), classid);
                                 break;
                             }
-                            case "3":{
+                            case "3": {
                                 System.out.println("输入你要退的课");
-                                int exitClass= sc.nextInt();
+                                int exitClass = sc.nextInt();
 
                                 String sql1 = "select id from student where root = ? and password = ?";
                                 Map<String, Object> map = jdbcTemplate.queryForMap(sql1, root, password);
                                 int i = Integer.parseInt(map.get("id").toString());
 
                                 String sql = "Delete from associatetables where 学生id = ? and 课程id = ?  ";
-                                jdbcTemplate.update(sql,exitClass,i);
+                                jdbcTemplate.update(sql, exitClass, i);
 
                                 System.out.println("退课成功!");
                                 System.out.println(" ");
@@ -391,13 +391,84 @@ public class demo {
                             }
 
                         }
-                        if (option2.equals("0" )){
+                        if (option2.equals("0")) {
                             break;
                         }
                     }
                     break;
                 }
 
+                case "0": {
+                    break;
+                }
+            }
+            if (option.equals("0")) {
+                break;
+            }
+        }
+
+    }
+
+
+    //学生注册-------------------------------------------
+    private static void enroll() {
+        while (true) {
+            System.out.println("-------------------欢迎来到注册系统--------------------");
+            System.out.println("1.学生注册");
+            System.out.println("2.教师注册");
+            System.out.println("0.退出程序");
+
+            Scanner sc = new Scanner(System.in);
+            String option = sc.nextLine();
+            switch (option) {
+                case "1": {
+
+                    System.out.println("请输入你的 id,姓名,性别,班级,账号,密码");
+                    System.out.println("请输入id");
+                    String option6 = sc.nextLine();
+                    System.out.println("请输入姓名");
+                    String option1 = sc.nextLine();
+                    System.out.println("请输入性别");
+                    String option2 = sc.nextLine();
+                    System.out.println("请输入班级");
+                    String option3 = sc.nextLine();
+                    System.out.println("请输入账号");
+                    String option4 = sc.nextLine();
+                    System.out.println("请输入密码");
+                    String option5 = sc.nextLine();
+                    try {
+                        String sqr = "insert into student values(null,?,?,?,?,?,?)";
+                        jdbcTemplate.update(sqr ,option6,option1,option2,option3,option4,option5);
+                        System.out.println("注册成功!");
+                    }catch (DataAccessException cs){
+                        System.out.println("请不要重复注册！");
+                        break;
+                    }
+
+                    break;
+                }
+                case "2": {
+                    System.out.println("请输入你的 id,姓名,手机号,账号,密码");
+                    System.out.println("请输入id");
+                    String option5 = sc.nextLine();
+                    System.out.println("请输入姓名");
+                    String option1 = sc.nextLine();
+                    System.out.println("请输入手机号");
+                    String option2 = sc.nextLine();
+                    System.out.println("请输入账号");
+                    String option3 = sc.nextLine();
+                    System.out.println("请输入密码");
+                    String option4 = sc.nextLine();
+
+                    try {
+                        String sqr1 = "insert into teacher values(null,?,?,?,?,?)";
+                        jdbcTemplate.update(sqr1,option5,option1,option2,option3,option4);
+                        System.out.println("注册成功!");
+                    }catch (DataAccessException cs){
+                        System.out.println("请不要重复注册！");
+                        break;
+                    }
+                }
                 case "0":{
                     break;
                 }
@@ -407,15 +478,8 @@ public class demo {
             }
         }
 
-    }
 
 
-
-
-
-
-    //学生注册-------------------------------------------
-    private static void enroll(){
 
     }
 }
