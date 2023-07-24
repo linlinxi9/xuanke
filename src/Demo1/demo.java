@@ -353,9 +353,9 @@ public class demo {
                                 System.out.println("你要选择的课程id是?");
                                 String classid = sc.nextLine();
                                 String sql = "select id from student where root = ? and password = ?";
-                                Map<String, Object> map = jdbcTemplate.queryForMap(sql, root, password);
+                                Map<String, Object> map = jdbcTemplate.queryForMap(sql, root, password); //查询学生id
 
-                                String sql2 = "insert into associatetables values(null,?,?) ";
+                                String sql2 = "insert into associatetables values(null,?,?) "; //添加课程
                                 jdbcTemplate.update(sql2, map.get("id"), classid);
 
                                 int i = Integer.parseInt(map.get("id").toString());
@@ -363,15 +363,17 @@ public class demo {
                                 String sql1 = "select count(*) from associatetables where 学生id = " + i + " and 课程id = " + i2;
                                 Long o = jdbcTemplate.queryForObject(sql1, Long.class);
                                 int i3 = o.intValue(); // 将 Long 类型的结果转换为 int 类型
-                                System.out.println(i3);
+
                                 if (i3 >= 2) {
                                     System.out.println("你选了重复的课 选课失败!");
-                                }
-                                String sql3 = "Delete from associatetables where 学生id = ? and 课程id = ? ";
-                                jdbcTemplate.update(sql3, map.get("id"), classid);
+                                    String sql3 = "Delete from associatetables where 学生id = ? and 课程id = ? ";
+                                    jdbcTemplate.update(sql3, map.get("id"), classid);
 
-                                String sql4 = "insert into associatetables values(null,?,?) ";
-                                jdbcTemplate.update(sql4, map.get("id"), classid);
+                                    String sql4 = "insert into associatetables values(null,?,?) ";
+                                    jdbcTemplate.update(sql4, map.get("id"), classid);
+                                }else {
+                                    System.out.println("选课成功!");
+                                }
                                 break;
                             }
                             case "3": {
