@@ -296,6 +296,7 @@ public class demo {
                                 jdbcTemplate.update(sql, sex, root, password);
                                 System.out.println("性别修改成功!");
                                 break;
+
                             }
                             case "3": {
                                 System.out.println("你的新班级是?");
